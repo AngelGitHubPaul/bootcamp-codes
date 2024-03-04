@@ -1,3 +1,6 @@
 Git Demonstration
 
 Hello, Batch 402!
+
+Mini-activity:
+Hi! My name is Angel Paul.
