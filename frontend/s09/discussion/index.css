@@ -83,3 +83,12 @@ nav .nav, nav .nav-logo {
 		inline-block - combination of inline(elemenst will be beside each other) and block(height and width can be set)
 	*/
 }
+
+footer {
+	padding: 0.7rem;
+}
+
+footer span {
+	margin-left: 0.5rem;
+	margin-right: 0.5rem;
+}
