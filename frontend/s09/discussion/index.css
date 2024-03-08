@@ -1,0 +1,85 @@
+/*CSS Reset*/
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: "Open Sans", sans-serif;
+}
+
+nav {
+	padding: 0.8rem;
+	margin-bottom: 2rem;
+	border-bottom: 1px solid gray;
+}
+
+nav ul {
+	list-style-type: none;
+}
+
+nav .nav, nav .nav-logo {
+	margin: 0.5rem;
+	display: inline;
+}
+
+/*Intro section*/
+#intro {
+	padding-left: 10%;
+	padding-right: 10%;
+	padding-top: 2rem;
+	padding-bottom: 3rem;
+	text-align: center;
+}
+
+.header {
+	text-align: center;
+}
+
+#intro h2, #intro p {
+	margin-bottom: 1rem;
+}
+
+#intro button {
+	color: white;
+	font-weight: bold;
+	background-color: #c2195b;
+	border-radius: 35px;
+	font-size: 1rem;
+	padding: 1rem;
+}
+
+#succeed-info {
+	padding-left: 10%;
+	padding-right: 10%;
+	padding-top: 2rem;
+	padding-bottom: 3rem;
+}
+
+#succeed-info h2 {
+	margin-bottom: 1rem;
+}
+
+#succeed-info h3 {
+	text-align: center;
+	margin-bottom: 1rem;
+}
+
+#succeed-info .card {
+	display: inline-block;
+	/*aligns elements with the tallest element in line*/
+	vertical-align: top;
+	width: 30%;
+	/*allows for cards to have equal height and adjust with the content*/
+	min-height: 175px;
+	margin-left: 0.5rem;
+	margin-right: 0.5rem;
+
+	/*
+		inline - we cannot set heigth and width
+				- used to make elements appear side by dife
+		block - we can set height and width
+		inline-block - combination of inline(elemenst will be beside each other) and block(height and width can be set)
+	*/
+}
