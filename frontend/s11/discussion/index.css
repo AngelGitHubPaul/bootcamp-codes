@@ -1,0 +1,88 @@
+.img-float {
+	height: 250px;
+	width: 250px;
+	/*allows elements to be positioned horizontally within their parent container*/
+	/*by default, elements are not floated*/
+	/*float:  inherit - inherits the float property of the parent element*/
+	/*Other values:  left, right and none*/
+	float: inherit;
+}
+
+.parent-element {
+	background-color: skyblue;
+	padding: 10px;
+	position: relative;
+	height: 800px;
+}
+
+.child-one {
+	background-color: gray;
+	padding: 10px;
+}
+
+.child-two {
+	background-color: yellow;
+	padding: 10px;
+	/*
+	static
+		- default value
+		- left, right, top, and bottom do not affect an element with the position:  static;
+	relative
+		- ramains in the normal document flow
+		- but unlike static, the left, right, top, and bottom properties are affected.
+	absolute 
+		- removed from the normal document flow
+		- relative to the closest position element
+	fixed
+		- remove from the normal document flow
+		- element always stays in the same position on the screen
+	sticky
+		- combination of relative and fixed position
+	*/
+	position: sticky;
+	/*left: 10px;
+	bottom: 10px;*/
+	top: 10px;
+}
+
+.child-three {
+	background-color: gray;
+	padding: 10px;
+}
+
+html {
+	height: 800vh;
+}
+
+.container {
+	position: relative;
+	border: 1px solid navy;
+}
+
+.black-box {
+	position: relative;
+	border: 2px solid black;
+	height: 100px;
+	margin: 30px;
+	z-index: 1;
+}
+
+.gray-box {
+	position: absolute;
+	background-color: lightgray;
+	width: 70%;
+	height: 60px;
+	left: 50px;
+	top: 50px;
+	z-index: 3;
+}
+
+.green-box {
+	position: absolute;
+	background-color: lightgreen;
+	width: 35%;
+	left: 270px;
+	top: -15px;
+	height: 100px;
+	z-index: 2;
+}
