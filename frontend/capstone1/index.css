@@ -17,7 +17,7 @@
 }
 
 .bg-mdarkorange {
-  background-color: #ed6240;
+  background-color: #ED8059;
 }
 
 .text-mdarkbrown {
@@ -38,7 +38,7 @@
 }
 
 .tools-background {
-  min-height: 85vh;
+  min-height: 90vh;
   background-image: url(./images/edgerunner.jpg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -47,7 +47,7 @@
 }
 
 .contact-background {
-  min-height: 85vh;
+  min-height: 80vh;
   background-image: url(./images/megumi.png);
   background-repeat: no-repeat;
   background-size: cover;
