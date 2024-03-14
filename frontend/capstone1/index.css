@@ -1,0 +1,61 @@
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.bg-mred {
+  background-color: #cb353d;
+}
+
+.bg-mdarkbrown{
+  background-color: #563d43;
+}
+
+.bg-mlightbrown{
+  background-color: #6a4a57;
+}
+
+.bg-mdarkorange {
+  background-color: #ed6240;
+}
+
+.text-mdarkbrown {
+  color: #563d43;
+}
+
+.text-mdarkyellow {
+  color: #f9b64e;
+}
+
+.landing-background {
+  min-height: 85vh;
+  background-image: url(./images/saber.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll;
+  background-position: center;
+}
+
+.tools-background {
+  min-height: 85vh;
+  background-image: url(./images/edgerunner.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll;
+  background-position: center;
+}
+
+.contact-background {
+  min-height: 85vh;
+  background-image: url(./images/megumi.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll;
+  background-position: center;
+}
+
+.opacity-effect {
+  background-color: rgba(0, 0, 0, 0.5);
+  min-height: 85vh;
+}
