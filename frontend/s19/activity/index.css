@@ -1,0 +1,105 @@
+nav {
+	background: #765C3D !important;
+
+}
+
+nav a {
+	font-family: Montserrat;
+	font-size: 18px;
+	font-weight: 500;
+	line-height: 22px;
+	letter-spacing: 0em;
+	text-align: center;
+	color: #F2D2AE !important;
+
+}
+
+#landing {
+	background: 
+		linear-gradient(
+			rgba(0, 0, 0, 0.59),
+			rgba(0, 0, 0, 0.59)
+
+		),
+	url("./images/banner.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+
+}
+
+#title {
+	font-family: Montserrat;
+	font-size: 64px;
+	font-weight: 600;
+	line-height: 72px;
+	letter-spacing: -0.02em;
+	text-align: left;
+	color: #FFFFFF;
+}
+
+#title-text {
+	font-family: Montserrat;
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 30px;
+	letter-spacing: 0em;
+	text-align: left;
+	color: #FFFFFF;
+}
+
+#base {
+	background: #B59066;
+	padding: 12px 32px 12px 32px;
+	border-radius: 999px;
+	font-family: Montserrat;
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 24px;
+	letter-spacing: 0px;
+	text-align: center;
+	color: #FFFFFF;
+
+}
+
+#gallery-title h3 {
+	font-family: Montserrat;
+	font-size: 40px;
+	font-weight: 600;
+	line-height: 49px;
+	letter-spacing: 0em;
+	color: #765C3D;
+
+}
+
+#gallery-title p {
+	font-family: Montserrat;
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 29px;
+	letter-spacing: 0em;
+
+}
+
+#gallery1 {
+	box-shadow: 0px 4px 23px 0px #00000040;
+
+}
+
+#gallery1 h3 {
+	font-family: Montserrat;
+	font-size: 40px;
+	font-weight: 600;
+	line-height: 49px;
+	letter-spacing: 0em;
+	color: #765C3D;
+
+}
+
+#gallery1 p {
+	font-family: Montserrat;
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 29px;
+	letter-spacing: 0em;
+
+}
