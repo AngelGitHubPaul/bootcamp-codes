@@ -67,6 +67,7 @@ nav a {
 	font-weight: 600;
 	line-height: 49px;
 	letter-spacing: 0em;
+	text-align: center;
 	color: #765C3D;
 
 }
@@ -77,6 +78,8 @@ nav a {
 	font-weight: 400;
 	line-height: 29px;
 	letter-spacing: 0em;
+	text-align: center;
+	color: #765C3D;
 
 }
 
