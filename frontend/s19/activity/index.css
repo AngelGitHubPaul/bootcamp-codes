@@ -106,3 +106,86 @@ nav a {
 	letter-spacing: 0em;
 
 }
+
+#contact-header {
+	font-family: Montserrat;
+	font-size: 40px;
+	font-weight: 600;
+	line-height: 49px;
+	letter-spacing: 0em;
+	text-align: left;
+	color: #765C3D;
+
+
+}
+
+#contact-text {
+	font-family: Montserrat;
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 29px;
+	letter-spacing: 0em;
+	text-align: left;
+	color: #765C3D;
+}
+
+form label {
+	font-family: Montserrat;
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 24px;
+	letter-spacing: 0em;
+	text-align: left;
+	color: #B59066;
+
+}
+
+form input {
+	font-family: Montserrat !important;
+	font-size: 24px !important;
+	font-weight: 600 !important;
+	line-height: 29px !important;
+	letter-spacing: 0em !important;
+	text-align: left !important;
+	border: 1px solid #B59066 !important;
+	background: #FFFFFF !important;
+	color: #765C3D !important;
+
+}
+
+form textarea {
+	border: 1px solid #B59066 !important;
+	background: #FFFFFF !important;
+	font-family: Montserrat !important;
+	font-size: 24px !important;
+	font-weight: 600 !important;
+	line-height: 29px !important;
+	letter-spacing: 0em !important;
+	text-align: left !important;
+}
+
+#form-btn {
+	padding: 12px 32px 12px 32px;
+	border-radius: 999px;
+	background: #B59066;
+	font-family: Montserrat;
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 24px;
+	letter-spacing: 0px;
+	text-align: center;
+	color: #FFFFFF;
+
+}
+
+footer {
+	background: #B59066;
+	color: #FFF2E4;
+	font-family: Montserrat;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 20px;
+	letter-spacing: 0em;
+	text-align: center;
+
+}
