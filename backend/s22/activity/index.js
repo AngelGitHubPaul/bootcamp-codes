@@ -24,7 +24,7 @@ function getUserInfo() {
 	let userInfo = {
 		name: "John Doe",
 		age: 25,
-		addres: "123 Street, Quezon City",
+		address: "123 Street, Quezon City",
 		isMarried: false,
 		petName: "Danny",
 	}
@@ -120,13 +120,13 @@ console.log(favoriteMovies);
 			
 */
 
-function getPrimeNumbersArray() {
+function getPrimeNumberArray() {
 	let PrimeNumbers = [ 7, 11, 23, 71, 97];
 
 	return PrimeNumbers;
 }
 
-let PrimeNumbers = getPrimeNumbersArray();
+let PrimeNumbers = getPrimeNumberArray();
 console.log(PrimeNumbers);
 
 
