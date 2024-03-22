@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>JavaScript - Reactice DOM with Fetch</title>
+</head>
+<body>
+	<!-- <button id="clicker">Click Me!</button> -->
+	<!-- We will add the post items as html elements in this div -->
+	<div id="div-post-entries"></div>
+	<form id="form-add-post">
+		<span>Title</span><br>
+		<input type="text" id="txt-title"/><br>
+		<span>Body</span><br>
+		<textarea type="text" id="txt-body"></textarea><br>
+		<button type="submit">Create</button>
+	</form>
+	<form id="form-edit-post">
+		<input type="text" id="txt-edit-id"/><br>
+		<span>Title</span><br>
+		<input type="text" id="txt-edit-title"/><br>
+		<span>Body</span><br>
+		<textarea type="text" id="txt-edit-body"></textarea><br>
+		<button type="submit" id="btn-submit-update" disabled>Update</button>
+	</form>
+	<script type="text/javascript" src="./index.js">
+	</script>
+</body>
+</html>
