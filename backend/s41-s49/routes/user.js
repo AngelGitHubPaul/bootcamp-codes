@@ -1,21 +1,33 @@
 const express = require("express");
-const userController = require("../controllers/user")
+const userController = require("../controllers/user");
+const {verify} = require("../auth");
 const router = express.Router();
 
 // Routes
-// Route for checking if the user's email already exist in the databse
-router.post("/checkEmail", (req, res) => {
-	userController.checkEmailExist(req.body).then(resultFromController => res.send(resultFromController));
-})
+// Route for checking if the user's email already exists in the database
+// router.post("/checkEmail", (req, res) => {
+// 	userController.checkEmailExists(req.body).then(resultFromController => res.send(resultFromController));
+// })
+router.post("/checkEmail", userController.checkEmailExists)
 
 // Route for registering a new user into the database
-router.post("/register", (req, res) => {
-	userController.registerUser(req.body).then(resultFromController => res.send(resultFromController));
-})
+router.post("/register", userController.registerUser);
 
 // Route for logging in an existing user in the database
-router.post("/login", (req, res) => {
-	userController.loginUser(req.body).then(resultFromController => res.send(resultFromController));
-})
+router.post("/login", userController.loginUser);
+
+
+// Route for retrieving user details
+// router.get("/details", verify, (req, res)=>{
+// 	// console.log(req)
+// 	// console.log("Result from the details route");
+// 	// console.log(req.user);
+
+//     userController.getProfile(req.user.id).then(resultFromController => res.send(resultFromController));
+// });
+
+router.get("/details", verify, userController.getProfile);
+
+
 
 module.exports = router;

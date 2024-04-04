@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 // Schema
 const enrollmentSchema = new mongoose.Schema({
@@ -8,9 +8,9 @@ const enrollmentSchema = new mongoose.Schema({
 	},
 	enrolledCourses: [
 		{
-			courseId:{
-				type: String,
-				required: [true, "Course ID is required"]
+			courseId: {
+			type: String,
+			required: [true, "Course ID is required"]
 			}
 		}
 	],
@@ -18,16 +18,15 @@ const enrollmentSchema = new mongoose.Schema({
 		type: Number,
 		required: [true, "Total price is required"]
 	},
-	createdOn: {
+	enrolledOn: {
 		type: Date,
 		default: Date.now
 	},
 	status: {
-		type: String,
+		type:String,
 		default: "Enrolled"
 	}
 })
 
-// Model
+// 
 module.exports = mongoose.model("Enrollment", enrollmentSchema);
-

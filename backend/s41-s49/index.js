@@ -1,29 +1,33 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const userRoutes = require("./routes/user")
+// Allows access to routes defined within our application
+const userRoutes = require("./routes/user");
+const courseRoutes = require("./routes/course");
 const port = 4000;
 
 const app = express();
 
-mongoose.connect("mongodb+srv://admin:admin123@b402-course-booking.5g84hfd.mongodb.net/course-booking-API?retryWrites=true&w=majority&appName=b402-course-booking")
+// MongoDB Connection
+mongoose.connect("mongodb+srv://admin:admin123@b402-course-booking.5g84hfd.mongodb.net/course-booking-API?retryWrites=true&w=majority&appName=b402-course-booking");
 
 let db = mongoose.connection;
-db.on("error", console.error.bind(console, "Connection error"));
+db.on("error", console.error.bind(console, "connection error"));
 db.once("open", () => console.log("Now connected to MongoDB Atlas"));
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-
+// Groups all routes in userRoutes under "/users" and courseRoutes under "/courses"
 app.use("/users", userRoutes);
+app.use("/courses", courseRoutes);
 
 
 
 
 if(require.main === module) {
 	app.listen(process.env.PORT || port, () => {
-		console.log(`API is now online on port ${process.env.PORT || port}`)
+		console.log(`API is now online on port ${ process.env.PORT || port}`);
 	})
 }
 
-module.exports = app;
+module.exports = {app, mongoose};
