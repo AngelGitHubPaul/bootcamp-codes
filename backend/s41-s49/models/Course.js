@@ -18,7 +18,7 @@ const courseSchema = new mongoose.Schema({
 		type: Boolean,
 		default: true
 	},
-  createdOn: {
+    createdOn: {
 		type: Date,
 		default: Date.now
 	},

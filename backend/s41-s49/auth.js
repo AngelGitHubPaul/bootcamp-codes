@@ -31,12 +31,13 @@ module.exports.createAccessToken = (user) => {
 	return jwt.sign(data, secret, {});
 }
 
-// Token verifications
+// Token verification
 
 module.exports.verify = (req, res, next) => {
 	console.log(req.headers.authorization);
 
 	let token = req.headers.authorization;
+	// console.log("This is the token", token)
 
 	if(typeof token === "undefined") {
 		return res.send({auth: "Failed. No Token."})
@@ -46,6 +47,7 @@ module.exports.verify = (req, res, next) => {
 		token = token.slice(7, token.length);
 		console.log(token);
 
+		// Token decryption
 		jwt.verify(token, secret, function(err, decodedToken) {
 
 			if(err) {
@@ -58,12 +60,14 @@ module.exports.verify = (req, res, next) => {
 				console.log(decodedToken);
 
 				req.user = decodedToken;
+				// console.log("This is the req.user:" + req.user);
 
 				next();
 			}
 		})
 	}
 }
+
 
 module.exports.verifyAdmin = (req, res, next) => {
 	console.log("Result from verifyAdmin method:");
@@ -73,7 +77,8 @@ module.exports.verifyAdmin = (req, res, next) => {
 	if(req.user.isAdmin) {
 		// move to the next middleware
 		next();
-		// if not admin, send the status and message
+
+	// If not admin, send the status and message
 	} else {
 		return res.status(403).send({
 			auth: "Failed",

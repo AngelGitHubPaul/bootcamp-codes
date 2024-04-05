@@ -16,8 +16,10 @@ router.post("/", verify, verifyAdmin, courseController.addCourse);
 // }); 
 router.get("/all", verify, verifyAdmin, courseController.getAllCourses); 
 
+//Route for retrieving all active courses
 router.get("/",courseController.getAllActive); 
 
+//Route for retrieving a specific course
 router.get("/:courseId",courseController.getCourse);
 
 // Route for updating a course (admin)

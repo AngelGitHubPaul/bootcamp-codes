@@ -28,6 +28,9 @@ router.post("/login", userController.loginUser);
 
 router.get("/details", verify, userController.getProfile);
 
+router.post("/enroll", verify, userController.enroll);
+
+router.get("/getEnrollments", verify, userController.getEnrollments);
 
 
 module.exports = router;
