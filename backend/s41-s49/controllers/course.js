@@ -19,26 +19,40 @@ module.exports.addCourse = (req, res) => {
 
     Course.findOne({name: req.body.name})
     .then(existingCourse => {
-        if(existingCourse) {
-            return res.status(409).send(false)
+        if (existingCourse){
+            return res.status(409).send({error: "Course already exists"})
         }
-        // Saves the created object to our database
         return newCourse.save()
         .then(savedCourse => {
-            return res.status(201).send(true)
+            return res.status(201).send({savedCourse})
         })
-        .catch(err => {
-            console.error("Error in saving the course:", err)
-            res.status(500).send(false)
-        })
+        .catch(saveErr => {
+            console.error("Error in saving the course:", saveErr);
+            return res.status(500).send({error: "Failed to save the course"})
+        });
     })
-    .catch (err => {
-
-        console.error("Error in finding the course", err)
-        return res.status(500).send({message: "Error finding the cours"})
+    .catch(findErr=>{
+        console.error("Error in finding the course", findErr)
+        return res.status(500).send({error: 'Error finding the course'})
     })
 
+    // Saves the created object to our database
     
+
+    // try {
+    //     let newCourse = new Course({
+    //         name : req.body.name,
+    //         description : req.body.description,
+    //         price : req.body.price
+    //     });
+
+    //     return newCourse.save()
+    //     .then(result => res.send(result))
+    //     .catch(err => res.send(err));
+    // } catch (err) {
+    //     console.log(err)
+    //     res.send("Error in variables");
+    // }
 }; 
 
 
@@ -48,34 +62,60 @@ module.exports.addCourse = (req, res) => {
     1. Retrieve all courses using the mongoose "find" method
     2. Use the "then" method to send a response back to the client appliction based on the result of the "find" method
 */
-module.exports.getAllCourses = (req,res) => {
+module.exports.getAllCourses = (req, res) => {
 
     return Course.find({})
-    .then(result => res.status(200).send(result))
-    .catch(err => res.status(500).send(err))
-
-};
-
-module.exports.getAllActive = (req,res) => {
-
-    return Course.find({isActive : true})
-    .then(result => {
-
-        if(result.length > 0) {
-            return res.status(200).send(result);
+    .then(courses => {
+        if(courses.length > 0) {
+            return res.status(200).send({courses});
         } else {
-            return res.status(500).send(false);
+            return res.status(200).send({message: "No courses found."});
         }
     })
-    .catch(err => res.status(500).send(err))
-}
+    .catch (err => {
+        console.error("Error in finding all courses", err)
+        return res.status(500).send({error: "Error finding courses"})
+    })
 
-module.exports.getCourse = (req,res) => {
-
-    return Course.findById(req.params.courseId)
-    .then(result => res.status(200).send(result))
-    .catch(err => res.status(500).send(err))
 };
+
+//Retrieve all active courses
+/*
+    Steps: 
+    1. Retrieve all courses using the mongoose "find" method with the "isActive" field values equal to "true"
+    2. Use the "then" method to send a response back to the client appliction based on the result of the "find" method
+*/
+module.exports.getAllActive = (req, res) => {
+
+    Course.find({ isActive: true })
+    .then(courses => {
+        
+        if (courses.length > 0){
+            return res.status(200).send({courses})
+        }else{
+            return res.status(200).send({message: "no active courses found."})
+        }
+    }).catch(err => {
+        console.error("Error in finding active courses: ", err)
+        res.status(500).send({error: 'Error in finding active courses.'})
+    });
+
+};
+
+//Retrieve a specific course
+/*
+    Steps: 
+    1. Retrieve a course using the mongoose "findById" method
+    2. Use the "then" method to send a response back to the client appliction based on the result of the "find" method
+*/
+module.exports.getCourse = (req, res) => {
+
+    Course.findById(req.params.courseId)
+    .then(course => res.status(200).send(course))
+    .catch(err => res.status(500).send(err));
+    
+};
+
 
 // Updating a course
 module.exports.updateCourse = (req, res) => {
@@ -86,50 +126,70 @@ module.exports.updateCourse = (req, res) => {
         price: req.body.price
     }
 
-    return Course.findByIdAndUpdate(req.params.courseId, updatedCourse)
-    .then(course => {
+    return Course.findByIdAndUpdate(req.params.courseId, updatedCourse, {new: true})
+    .then(updatedCourse => {
 
-        if(course) {
-            res.status(200).send(true);
+        if(updatedCourse) {
+            res.status(200).send({
+                message: "Course updated successfully",
+                updatedCourse: updatedCourse
+            });
         } else {
-            res.status(404).send(false)
+            res.status(404).send({error: 'Course not found'})
         }
     })
-    .catch(err => res.status(500).send(err));
+    .catch(err => {
+        console.error("Error in updating a course: ", err)
+        res.status(500).send({error: "Error in updating a course."})
+    });
 
 }
+
+//[S44 Activity]
+
+//Archive a course
+module.exports.archiveCourse = (req, res) => {
+    let updateActiveField = {
+        isActive: false
+    }
+
+    if(!req.user.isAdmin){
+        return res.status(403).send(false)
+    } else {
+        return Course.findByIdAndUpdate(req.params.courseId, updateActiveField)
+        .then(course => {
+            if (course) {
+                res.status(200).send(true);
+            } else {
+                res.status(400).send(false);
+            }
+        })
+        .catch(err => res.status(500).send(err));
+    }
+    
+};
 
 module.exports.activateCourse = (req, res) => {
-    let activatedCourse = {
+
+    let updateActiveField = {
         isActive: true
     }
-
-    return Course.findByIdAndUpdate(req.params.courseId, activatedCourse)
-    .then(course => {
-
-        if(course) {
-            res.status(200).send(true);
-        } else {
-            res.status(404).send(false)
-        }
-    })
-    .catch(err => res.status(500).send(err));
-}
-
-// Archive a course
-module.exports.archiveCourse = (req, res) => {
-    let archivedCourse = {
-        isActive : false
-    }
-
-    return Course.findByIdAndUpdate(req.params.courseId, archivedCourse)
-    .then(course => {
-
-        if(course) {
-            res.status(200).send(true);
-        } else {
-            res.status(404).send(false)
-        }
-    })
-    .catch(err => res.status(500).send(err));
-}
+    
+    if(!req.user.isAdmin){
+        return res.status(403).send(false)
+    } else {
+        return Course.findByIdAndUpdate(req.params.courseId, updateActiveField)
+        .then(course => {
+            if (course) {
+                return res.status(200).send(true);
+            } else {
+                return res.status(400).send(false);
+            }
+        })
+        .catch (err => {
+            console.error("Error in activating the course", err)
+            return res.status(500).send(err)
+        })
+    } 
+    
+};

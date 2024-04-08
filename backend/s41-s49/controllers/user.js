@@ -6,30 +6,60 @@ const bcrypt = require("bcrypt");
 // Check if email already exists
 module.exports.checkEmailExists = (req, res) => {
 
-	if(req.body.email.includes("@")) {
-		// The result is sent back to the client via the .then method
+
+	if(req.body.email.includes("@")){
 		return User.find({email: req.body.email})
 		.then(result => {
-			// The find method returns a record if a match is founf
-			if(result.length > 0) {
-				return res.status(409).send(true);
-
-			// No duplicate found
-				// The user is not yet registered in the database
-			} else {
-				return res.status(404).send(false);
-			}
-		})
-		.catch(err => res.status(500).send(err))
-	} else {
+	        if (result.length > 0) {
+	            // If there is a duplicate email, send true with 409 http status back to the client
+	            return res.status(409).send(true);
+	        } else {
+	            // If there is no duplicate email, send false with 404 http status back to the client
+	            return res.status(404).send(false);
+	        };
+	    })
+	    // if an error occured in the .catch(), send the error with the 500 http status back to the client
+	    .catch(err => res.status(500).send(err))
+	}else{
 		res.send(false)
 	}
 
+	// The result is sent back to the client via the .then method
+	
+
+	/*.then(result => {
+		// The find method returns a record if a match is founf
+		if(result.length > 0) {
+			return res.send(true);
+
+		// No duplicate found
+			// The user is not yet registered in the database
+		} else {
+			return res.send(false);
+		}
+	})
+	.catch(err => res.send(err));*/
+
 }
 
-// 409 is the status code for duplicate records
-// 404 is the status code for not found
-// 500 internal server error
+//409 is the status code for duplicate records
+//404 is the status code for not found
+//500 internal server error
+
+/*
+	Mini-A Instructions:
+
+		Update the checkEmailExists to add status codes
+		- if there is a duplicate email, send true with 409 http status code back to the client
+		- if there is no duplicate email, send false with 404 http status code back to the client
+		- if there is an error occured in the .catch(), send the error with the 500 http status back to the client
+
+
+*/
+
+
+
+
 
 // Register new user into database
 /*
@@ -48,11 +78,18 @@ module.exports.registerUser = (req, res) => {
 		password: bcrypt.hashSync(req.body.password, 10)
 	})
 
-	// 2. Save the new user data into the database by using the 'save()' function which comes from the usage of mongoose npm package
-	return newUser.save()
-	.then((result) => res.status(201).send(result))
-	// catch the error and return to the handler function. No return keyword used because we're using arrow function's implicit return feature
-	.catch(err => res.status(500).send(err))
+	// Validate mobile number
+	if (req.body.mobileNo.length !== 11 || !req.body.email.includes("@") || req.body.password.length < 8) {
+    return res.status(400).send(false);
+	} else {
+		
+		// 2. Save the new user data into the database by using the 'save()' function which comes from the usage of mongoose npm package
+		return newUser.save()
+		.then((result) => res.status(201).send(result))
+		// catch the error and return to the handler function. No return keyword used because we're using arrow function's implicit return feature
+		.catch(err => res.status(500).send(err));
+	
+	}	
 }
 
 // Login an existing user
@@ -64,8 +101,9 @@ module.exports.registerUser = (req, res) => {
 */
 module.exports.loginUser = (req, res) => {
 
-	if(req.body.email.includes("@")) {
-		// First looks for an existing user based on the email provided
+
+	if(req.body.email.includes("@")){
+
 		return User.findOne({email: req.body.email})
 
 		.then(result => {
@@ -84,16 +122,30 @@ module.exports.loginUser = (req, res) => {
 				if(isPasswordCorrect){
 					return res.status(200).send({accessToken: auth.createAccessToken(result)});
 				} else {
-					return res.status(401).send("Email and password do not match.");
+					return res.status(401).send("Email and password do not match");
 				}
 			}
-		}).catch(err => res.status(500).send(err))
-	} else {
+		}).catch(err => res.status(500).send(err));
+	}else{
 		return res.status(400).send(false)
 	}
 
+
+
+	// First looks for an existing user based on the email provided
 	
 }
+
+/*
+	Mini-A Instructions:
+	Update the loginUser to add status codes
+	- if the email is not found in the db, return 404 http status code
+	- upon successful login and creation of the access token, send 200 http status code
+	- if the email and password does not match, send 401 http status code
+	- if there are errors in logging in, send 500 http status code
+
+
+*/
 
 
 //Retrieve user details
@@ -110,14 +162,14 @@ module.exports.getProfile = (req, res) => {
         result.password = "";
         return res.status(200).send(result);
     })
-    .catch(err => res.status(500).send(err))
+    .catch(err => res.send(err));
 };
 
-// the status code of a response is a 3-digit integer that describes the result of the req and the semantics of the res
+//The status code of a response is a 3-digit integer that describes the result of the req and the semantics of res
 
-// [Enroll a user to a course]
+
+//[Enroll a user to a course]
 /*
-
 */
 
 module.exports.enroll = (req, res) => {
@@ -125,21 +177,24 @@ module.exports.enroll = (req, res) => {
 	console.log(req.user.id);
 	console.log(req.body.enrolledCourses);
 
-	if(req.user.isAdmin) {
-		return res.status(403).send(false)
+	if(req.user.isAdmin){
+		return res.status(403).send(false);
 		// 403 means unauthorized access
 	}
-	let newEnrollment = new Enrollment({
+
+	let newEnrollment = new Enrollment ({
+
 		userId: req.user.id,
 		enrolledCourses: req.body.enrolledCourses,
 		totalPrice: req.body.totalPrice
 	})
 
 	return newEnrollment.save()
-	.then(enrolled => {
+	.then(enrolled =>{
 		return res.status(201).send(true)
 	})
-	.catch(err => res.status(500).send(err));
+	.catch(err=>res.status(500).send(err));
+
 }
 
 module.exports.getEnrollments = (req, res) => {

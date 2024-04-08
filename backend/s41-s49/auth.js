@@ -82,7 +82,7 @@ module.exports.verifyAdmin = (req, res, next) => {
 	} else {
 		return res.status(403).send({
 			auth: "Failed",
-			message: "Action forbidden"
+			message: "Action Forbidden"
 		})
 	}
 }
