@@ -296,3 +296,23 @@ module.exports.updateAdmin = async (req, res) => {
         res.status(500).json({ message: 'An error occurred while updating user as admin.' });
     }
 }
+
+module.exports.updateEnrollmentStatus = async (req, res) => {
+    const { userId, courseId, status } = req.body;
+
+    try {
+        // Find the enrollment record for the given user and course
+        let enrollment = await Enrollment.findOne({ userId: userId, 'enrolledCourses.courseId': courseId });
+        if (!enrollment) {
+            return res.status(404).json({ message: 'Enrollment record not found for the specified user and course.' });
+        }
+
+        enrollment.status = status;
+        await enrollment.save();
+
+        res.status(200).json({ message: 'Enrollment status updated successfully.' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'An error occurred while updating enrollment status.' });
+    }
+}

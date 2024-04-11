@@ -80,4 +80,6 @@ router.put('/profile', verify, userController.updateProfile);
 
 router.put('/updateAdmin', verify, verifyAdmin, userController.updateAdmin);
 
+router.patch('/updateEnrollmentStatus', verify, verifyAdmin, userController.updateEnrollmentStatus);
+
 module.exports = router;
