@@ -86,3 +86,12 @@ module.exports.verifyAdmin = (req, res, next) => {
 		})
 	}
 }
+
+// Middleware to check if user is authenticated
+module.exports.isLoggedIn = (req, res, next) => {
+	if (req.user){
+		next();
+	} else {
+		res.sendStatus(401);
+	}
+}

@@ -1,6 +1,7 @@
 const express = require("express");
+const passport = require('passport');
 const userController = require("../controllers/user");
-const {verify} = require("../auth");
+const { verify, isLoggedIn } = require("../auth");
 const router = express.Router();
 
 // Routes
@@ -32,5 +33,49 @@ router.post("/enroll", verify, userController.enroll);
 
 router.get("/getEnrollments", verify, userController.getEnrollments);
 
+// Google Login
+router.get('/google', 
+	passport.authenticate('google', {
+		scope:['email', 'profile'],
+		// prompt: "select_account"
+	})
+)
+
+router.get('/google/callback', 
+	passport.authenticate('google', {
+		failureRedirect: '/users/failed'
+	}),
+	function (req, res) {
+		res.redirect('/users/success')
+	}
+)
+
+router.get('/failed', (req,res) => {
+	console.log("User is not authenticated.")
+	res.send("Failed");
+})
+
+router.get('/success', isLoggedIn, (req,res) => {
+	console.log("You are looged in");
+	console.log(req.user);
+	res.send(`Welcome ${req.user.displayName}`);
+})
+
+router.get('/logout', (req, res) => {
+	req.session.destroy((err) => {
+		if(err) {
+			console.log('Error while destroying session: ', err);
+		} else {
+			req.logout(() => {
+				res.redirect('/');
+			})
+		}
+	})
+})
+
+// Route for resetting the user password
+router.post('/reset-password', verify, userController.resetPassword);
+
+router.put('/profile', verify, userController.updateProfile);
 
 module.exports = router;

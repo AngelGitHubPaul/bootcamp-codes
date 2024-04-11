@@ -12,16 +12,16 @@ module.exports.checkEmailExists = (req, res) => {
 		.then(result => {
 	        if (result.length > 0) {
 	            // If there is a duplicate email, send true with 409 http status back to the client
-	            return res.status(409).send(true);
+	            return res.status(409).send({error: 'Duplicate Email Found'});
 	        } else {
 	            // If there is no duplicate email, send false with 404 http status back to the client
-	            return res.status(404).send(false);
+	            return res.status(404).send({error: 'Email not found'});
 	        };
 	    })
 	    // if an error occured in the .catch(), send the error with the 500 http status back to the client
-	    .catch(err => res.status(500).send(err))
+	    .catch(err => res.status(500).send({error: 'Error in Find'}))
 	}else{
-		res.send(false)
+		res.status(400).send({error: 'Invalid Email' })
 	}
 
 	// The result is sent back to the client via the .then method
@@ -69,27 +69,36 @@ module.exports.checkEmailExists = (req, res) => {
     3. Save the new User to the database
 */
 module.exports.registerUser = (req, res) => {
-	// 1. Creating a new instance of the User model
-	let newUser = new User({
-		firstName: req.body.firstName,
-		lastName: req.body.lastName,
-		email: req.body.email,
-		mobileNo: req.body.mobileNo,
-		password: bcrypt.hashSync(req.body.password, 10)
-	})
 
-	// Validate mobile number
-	if (req.body.mobileNo.length !== 11 || !req.body.email.includes("@") || req.body.password.length < 8) {
-    return res.status(400).send(false);
-	} else {
-		
-		// 2. Save the new user data into the database by using the 'save()' function which comes from the usage of mongoose npm package
-		return newUser.save()
-		.then((result) => res.status(201).send(result))
-		// catch the error and return to the handler function. No return keyword used because we're using arrow function's implicit return feature
-		.catch(err => res.status(500).send(err));
-	
-	}	
+	// Checks if the email is in the right format
+    if (!req.body.email.includes("@")){
+        return res.status(400).send({error: 'Email invalid'});
+    }
+    // Checks if the mobile number has the correct number of characters
+    else if (req.body.mobileNo.length !== 11){
+        return res.status(400).send({error: 'Mobile number invalid'});
+    }
+    // Checks if the password has atleast 8 characters
+    else if (req.body.password.length < 8) {
+        return res.status(400).send({error: 'Password must be atleast 8 characters'});
+    // If all needed requirements are achieved
+    } else {
+    	// 1. Creating a new instance of the User model
+    	let newUser = new User({
+    		firstName: req.body.firstName,
+    		lastName: req.body.lastName,
+    		email: req.body.email,
+    		mobileNo: req.body.mobileNo,
+    		password: bcrypt.hashSync(req.body.password, 10)
+    	})
+
+    	// 2. Save the new user data into the database by using the 'save()' function which comes from the usage of mongoose npm package
+    	return newUser.save()
+    	.then((result) => res.status(201).send({message: 'Registered Successfully', result}))
+    	// catch the error and return to the handler function. No return keyword used because we're using arrow function's implicit return feature
+    	.catch(err => res.status(500).send({error: 'Error in Save'}));
+    }
+
 }
 
 // Login an existing user
@@ -111,7 +120,7 @@ module.exports.loginUser = (req, res) => {
 			// If the user doesn't exist, then return false
 			if(result == null){
 
-				return res.status(404).send("No email found");
+				return res.status(404).send({error: 'No Email Found'});
 
 			} else {
 				// Compares the existing password to the password from postman (returns either true or false).
@@ -120,14 +129,14 @@ module.exports.loginUser = (req, res) => {
 				// Checks if password matches, if it does then return a newly generated access token. If not, just return false.
 				// Uses the "createAccessToken" method defined in the "auth.js" file
 				if(isPasswordCorrect){
-					return res.status(200).send({accessToken: auth.createAccessToken(result)});
+					return res.status(200).send({access: auth.createAccessToken(result)});
 				} else {
-					return res.status(401).send("Email and password do not match");
+					return res.status(401).send({error: 'Email and password do not match'});
 				}
 			}
-		}).catch(err => res.status(500).send(err));
+		}).catch(err => res.status(500).send({error: 'Error in find' }));
 	}else{
-		return res.status(400).send(false)
+		return res.status(400).send({error: 'Invalid in email'})
 	}
 
 
@@ -158,11 +167,20 @@ module.exports.loginUser = (req, res) => {
 module.exports.getProfile = (req, res) => {
 
     return User.findById(req.user.id)
-    .then(result => {
-        result.password = "";
-        return res.status(200).send(result);
+    .then(user => {
+    	if(user) {
+    		user.password = "";
+        	return res.status(200).send({user});
+    	} else {
+            res.status(404).send({error : 'User not found'})
+        }
+
+        
     })
-    .catch(err => res.send(err));
+    .catch(err => {
+    	console.error("Failed to fetch user profile: ", err)
+    	res.status(500).send({error: "Failed to fetch user profile."})
+    });
 };
 
 //The status code of a response is a 3-digit integer that describes the result of the req and the semantics of res
@@ -178,7 +196,7 @@ module.exports.enroll = (req, res) => {
 	console.log(req.body.enrolledCourses);
 
 	if(req.user.isAdmin){
-		return res.status(403).send(false);
+		return res.status(403).send({error: "Admin is forbidden"});
 		// 403 means unauthorized access
 	}
 
@@ -191,9 +209,12 @@ module.exports.enroll = (req, res) => {
 
 	return newEnrollment.save()
 	.then(enrolled =>{
-		return res.status(201).send(true)
+		return res.status(201).send({message: "Successfully Enrolled", enrolled})
 	})
-	.catch(err=>res.status(500).send(err));
+	.catch(err => {
+    	console.error("Error in enrolling: ", err)
+    	res.status(500).send({error: "Error in enrolling."})
+    });
 
 }
 
@@ -201,9 +222,55 @@ module.exports.getEnrollments = (req, res) => {
     return Enrollment.find({userId : req.user.id})
         .then(enrollments => {
             if (enrollments.length > 0) {
-                return res.status(200).send(enrollments);
+                return res.status(200).send({enrollments});
+            } else {
+            	res.status(404).send({error : 'User not found'})
             }
-            return res.status(404).send(false);
+            
         })
-        .catch(err => res.status(500).send(err));
+        .catch(err => {
+	    	console.error("Failed to fetch enrollments: ", err)
+	    	res.status(500).send({error: "Failed to fetch enrollments."})
+	    });
 };
+
+module.exports.resetPassword = async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    const { id } = req.user; // Extracting user ID from the authorization header
+
+    // Hashing the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Updating the user's password in the database
+    await User.findByIdAndUpdate(id, { password: hashedPassword });
+
+    // Sending a success response
+    res.status(200).json({ message: 'Password reset successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+module.exports.updateProfile = async (req, res) => {
+	try {
+		// Get the user ID from the authenticated token
+		const id = req.user.id;
+
+		// Retrieve the updated profile information from the request body
+		const { firstName, lastName, mobileNo } = req.body;
+
+		// Update the user's profile in the database
+		const updatedUser = await User.findByIdAndUpdate(
+		  id,
+		  { firstName, lastName, mobileNo },
+		  { new: true }
+		);
+
+		res.json(updatedUser);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: 'Failed to update profile' });
+	}
+}
