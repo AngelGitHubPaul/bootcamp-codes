@@ -25,9 +25,11 @@ router.get("/:courseId",courseController.getCourse);
 // Route for updating a course (admin)
 router.patch("/:courseId", verify, verifyAdmin, courseController.updateCourse);
 
-router.post('/search', courseController.searchCoursesByName);
+router.post('/searchCoursesByName', courseController.searchCoursesByName);
 
 router.post('/:courseId/enrolled-users', courseController.getEmailsOfEnrolledUsers);
+
+router.post('/search', courseController.searchCoursesByPriceRange);
 
 // Allows us to export the "router" object that will be accessed in our "index.js" file
 module.exports = router;

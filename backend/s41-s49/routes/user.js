@@ -1,7 +1,7 @@
 const express = require("express");
 const passport = require('passport');
 const userController = require("../controllers/user");
-const { verify, isLoggedIn } = require("../auth");
+const { verify, verifyAdmin, isLoggedIn } = require("../auth");
 const router = express.Router();
 
 // Routes
@@ -77,5 +77,7 @@ router.get('/logout', (req, res) => {
 router.post('/reset-password', verify, userController.resetPassword);
 
 router.put('/profile', verify, userController.updateProfile);
+
+router.put('/updateAdmin', verify, verifyAdmin, userController.updateAdmin);
 
 module.exports = router;

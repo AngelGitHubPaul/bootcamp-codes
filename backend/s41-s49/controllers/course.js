@@ -253,3 +253,21 @@ module.exports.getEmailsOfEnrolledUsers = async (req, res) => {
         res.status(500).json({ message: 'An error occurred while retrieving enrolled users' });
     }
 };
+
+module.exports.searchCoursesByPriceRange = async (req, res) => {
+    const { minPrice, maxPrice } = req.body;
+
+    try {
+        // Find courses within the given price range
+        const courses = await Course.find({ price: { $gte: minPrice, $lte: maxPrice } });
+
+        if (!courses || courses.length === 0) {
+            return res.status(404).json({ message: 'No courses found within the specified price range.' });
+        }
+
+        res.status(200).json({ courses });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'An error occurred while searching for courses by price range.' });
+    }
+}
