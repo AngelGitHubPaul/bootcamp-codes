@@ -1,49 +1,39 @@
 import { useState } from 'react';
-import { Row, Col, Card, Button } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 
+export default function CourseCard ({courseProp}) {
 
-export default function CourseCard({courseProp}){
-	
-	// console.log(props);
-	const { name, description, price } = courseProp;
-	// Syntax: const [ getter, setter function ] = useState(initialGetterValue)
-	const [ count, setCount ] = useState(0);
+    // console.log(props);
+    const { name, description, price } = courseProp;
+    // Syntax: const [getter, setter function] = useState(initialGetterValue)
+    const [ count, setCount ] = useState(0);
+    const [ seats, setSeat] = useState(30);
 
-	function enroll() {
-		setCount(count + 1);
-		console.log('Enrollees: ' + count);
-	}
+    function enroll(){
+        if (seats === 0){
+            console.log('Enrollees: ' + count);
+            console.log('Available Seats: ' + seats)
+            alert("no more seats")
+        } else {
+            setSeat (seats - 1);
+            setCount(count + 1);
+            console.log('Enrollees: ' + count);
+            console.log('Available Seats: ' + seats);
+        } 
 
-	return(
-		<Row className="mt-3 mb-3">
-			<Col xs={12} md={12}>
-				<Card id="courseComponent" className="cardHighlight p-3" >
-				  <Card.Body>
-				    <Card.Title id="courseTitle">
-				    	<h2>{name}</h2>
-				    </Card.Title>
-				    <Card.Text>
-				        <Card.Title id="courseDescription">
-				        	Description:
-				        </Card.Title>
-				        <Card.Text>
-				        	{description}
-				        </Card.Text>
-
-				        <Card.Title>
-				        	Price:
-				        </Card.Title>
-				        <Card.Text id ="coursePrice">
-				        	Php {price}
-				        </Card.Text>
-				        <Card.Text >
-				        	Enrollees: {count}
-				        </Card.Text>
-				    </Card.Text>
-				    <Button variant="primary" onClick={enroll}>Enroll</Button>
-				  </Card.Body>
-				</Card>
-			</Col>
-		</Row>
+        
+    }
+	return (
+		<Card id="courseComponent1">
+            <Card.Body>
+                <Card.Title>{name}</Card.Title>
+                <Card.Subtitle>Description:</Card.Subtitle>
+                <Card.Text>{description}</Card.Text>
+                <Card.Subtitle>Price:</Card.Subtitle>
+                <Card.Text>Php {price}</Card.Text>
+                <Card.Text>Enrollees: {count}</Card.Text>
+                <Button variant="primary" onClick={enroll}>Enroll</Button>
+            </Card.Body>
+        </Card>
 	)
 }

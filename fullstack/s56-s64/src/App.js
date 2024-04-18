@@ -5,14 +5,16 @@ import AppNavBar from './components/AppNavBar';
 // import Highlights from './components/Highlights';
 import Home from './pages/Home';
 import Courses from './pages/Courses';
+import Register from './pages/Register';
 
 function App() {
   return (
     <>
       <AppNavBar />
       <Container>
-        <Home/>
-        <Courses/>
+{/*        <Home/>
+        <Courses/>*/}
+        <Register/>
         
       </Container>
     </>
