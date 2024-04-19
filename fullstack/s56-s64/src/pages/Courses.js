@@ -1,8 +1,8 @@
-import coursesData from '../data/coursesData'
+import coursesData from '../data/coursesData';
 import CourseCard from '../components/CourseCard';
 
-export default function Courses () {
-	
+export default function Courses() {
+
 	console.log(coursesData);
 
 	const courses = coursesData.map(course => {
@@ -11,10 +11,11 @@ export default function Courses () {
 		)
 	})
 
-	return (
+	return(
 		<>
 			<h1>Courses</h1>
 			{courses}
+			
 		</>
 	)
 }
