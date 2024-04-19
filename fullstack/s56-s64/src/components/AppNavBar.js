@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link, NavLink } from 'react-router-dom';
+import UserContext from '../UserContext'
 
 
 export default function AppNavBar() {
 
 	// State to store the user information stored in the login page.
-	const [ user, setUser ] = useState(localStorage.getItem('token'));
+	const { user } = useContext(UserContext);
 	console.log(user);
 
 	return (
@@ -21,7 +22,7 @@ export default function AppNavBar() {
 				        <Nav.Link as={NavLink} to="/">Home</Nav.Link>
 				        <Nav.Link as={NavLink} to="/courses">Courses</Nav.Link>
 
-				        {(user !== null)
+				        {(user.access !== null)
 				        	?
 				        	<Nav.Link as={NavLink} to="/logout">Logout</Nav.Link>
 				        	:

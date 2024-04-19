@@ -1,7 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { Navigate } from 'react-router-dom'
+import UserContext from '../UserContext'
 
 export default function Login() {
+	// Allows us to consume the UserContext object and its properties
+	const { user, setUser } = useContext(UserContext);
 
 	// State hooks to store the values of the input fields
 	const [email, setEmail] = useState('');
@@ -48,6 +52,10 @@ export default function Login() {
 	    	// localStorage.setItem('propertyName', value);
 	    	localStorage.setItem('token', data.accessToken);
 
+	    	setUser({
+	    		access: localStorage.getItem('token')
+	    	})
+
 	        alert(`You are now logged in`);
 	    
 	    } else if (data.error === "No Email Found") {
@@ -66,8 +74,12 @@ export default function Login() {
 	}
 
 
-    return (    
-            
+    return (   
+
+    	(user.access !== null)
+    	?
+    		<Navigate to="/courses"/>
+    	:            
     	<Form onSubmit={(e) => authenticate(e)}>
     	    <h1 className="my-5 text-center">Login</h1>
     	    <Form.Group controlId="userEmail">
