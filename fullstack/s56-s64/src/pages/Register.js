@@ -1,7 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect , useContext} from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { Navigate } from 'react-router-dom'
+import UserContext from '../UserContext'
 
 export default function Register() {
+
+	const {user} = useContext(UserContext)
 
 	// States to store the values of the input fields
 	const [ firstName, setFirstName] = useState("");
@@ -83,6 +87,8 @@ export default function Register() {
 
 
 	return (
+		(user.id !== null) 
+		? <Navigate to="/courses"/> :
 		<Form onSubmit={(e) => registerUser(e)}>
 		<h1 className="my-5 text-center">Register</h1>
 

@@ -1,6 +1,7 @@
 import Banner from '../components/Banner';
 import Highlights from '../components/Highlights';
 // import CourseCard from '../components/CourseCard';
+import FeaturedCourses from '../components/FeaturedCourses';
 
 export default function Home() {
 
@@ -14,6 +15,7 @@ export default function Home() {
 	return(
 		<>
 			<Banner data={data}/>
+			<FeaturedCourses />
 			<Highlights />
 		</>
 	)

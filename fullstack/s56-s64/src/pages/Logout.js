@@ -10,8 +10,11 @@ export default function Logout() {
 	unsetUser();
 
 	useEffect(() => {
-		setUser({access: null})
-	})
+		setUser({
+			id: null,
+			isAdmin: null
+		})
+	}, [])
 
 	return (
 		<Navigate to="/login" />

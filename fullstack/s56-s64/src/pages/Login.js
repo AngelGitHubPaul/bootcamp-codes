@@ -1,11 +1,13 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect , useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom';
+import Swal from 'sweetalert2'
 import UserContext from '../UserContext'
 
 export default function Login() {
-	// Allows us to consume the UserContext object and its properties
-	const { user, setUser } = useContext(UserContext);
+
+	// Allows us to  consume the UserContext object
+	const {user, setUser} = useContext(UserContext);
 
 	// State hooks to store the values of the input fields
 	const [email, setEmail] = useState('');
@@ -29,57 +31,91 @@ export default function Login() {
 	    // Prevents page redirection via form submission
 	    e.preventDefault();
 	    fetch('http://localhost:4000/users/login',{
-	    method: 'POST',
-	    headers: {
-	        "Content-Type": "application/json"
-	    },
-	    body: JSON.stringify({
-	
-	        email: email,
-	        password: password
-	
-	    })
-	})
-	.then(res => res.json())
-	.then(data => {
+		    method: 'POST',
+		    headers: {
+		        "Content-Type": "application/json"
+		    },
+		    body: JSON.stringify({
+		
+		        email: email,
+		        password: password
+		
+		    })
+		})
+		.then(res => res.json())
+		.then(data => {
 
-		console.log(data)
+			console.log(data)
 
-	    if(data.accessToken){
+		    if(data.accessToken){
 
-	    	// Set the token of the authenticated user in the local storage
-	    	// Syntax
-	    	// localStorage.setItem('propertyName', value);
-	    	localStorage.setItem('token', data.accessToken);
+		    	// Set the token of the authenticated user in the local storage
+		    	// Syntax
+		    	// localStorage.setItem('propertyName', value);
+		    	localStorage.setItem('token', data.accessToken);
 
-	    	setUser({
-	    		access: localStorage.getItem('token')
-	    	})
+		        // setUser({
+		        // 	access : localStorage.getItem('token')
+		        // })
 
-	        alert(`You are now logged in`);
-	    
-	    } else if (data.error === "No Email Found") {
+		       	retrieveUserDetails(data.accessToken)
 
-	        alert(`Email not found`);
+		        // alert(`You are now logged in`);
 
-	    } else {
+		        Swal.fire({
+		        	title: "Login Successfull",
+		        	icon: "success",
+		        	text: "Welcome to Zuitt!"
+		        })
+		    
+		    } else if (data.error === "No Email Found") {
 
-	        alert(`${email} does not exist`)
-	    }
-	})
-	// Clear input fields after submission
-	setEmail('');
-	setPassword('');
+		        Swal.fire({
+		        	title: "Email not found",
+		        	icon: "error",
+		        	text: "Check your email and try again"
+		        })
+
+		    } else {
+
+		        Swal.fire({
+		        	title: "Authentication failed",
+		        	icon: "error",
+		        	text: "Check your login credentials and try again"
+		        })
+		    }
+		})
+		// Clear input fields after submission
+		setEmail('');
+		setPassword('');
+
+	}
+
+	const retrieveUserDetails = (token) => {
+		fetch('http://localhost:4000/users/details', {
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		})
+		.then(res => res.json())
+		.then(data => {
+			console.log(data);
+
+			setUser({
+				id: data.user._id,
+				isAdmin: data.user.isAdmin
+			})
+		})
 
 	}
 
 
-    return (   
-
-    	(user.access !== null)
+    return (    
+        
+    	(user.id !== null )
     	?
-    		<Navigate to="/courses"/>
-    	:            
+    	<Navigate to="/courses"/>
+    	:
     	<Form onSubmit={(e) => authenticate(e)}>
     	    <h1 className="my-5 text-center">Login</h1>
     	    <Form.Group controlId="userEmail">
