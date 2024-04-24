@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { Navigate } from 'react-router-dom';
 import UserContext from '../UserContext';
-
+import ResetPassword from '../components/ResetPassword';
 
 export default function Profile(){
 
@@ -54,19 +54,25 @@ export default function Profile(){
         ?
         <Navigate to="/courses" />
         :
-        <Row>
-            <Col className="p-5 bg-primary text-white">
-                <h1 className="my-5 ">Profile</h1>
-                <h2 className="mt-3">{`${details.firstName} ${details.lastName}`}</h2>
-                <hr />
-                <h4>Contacts</h4>
-                <ul>
-                    <li>Email: {details.email}</li>
-                    <li>Mobile No: {details.mobileNo}</li>
-                </ul>
-            </Col>
-        </Row>
-
+        <>
+            <Row>
+                <Col className="p-5 bg-primary text-white">
+                    <h1 className="my-5 ">Profile</h1>
+                    <h2 className="mt-3">{`${details.firstName} ${details.lastName}`}</h2>
+                    <hr />
+                    <h4>Contacts</h4>
+                    <ul>
+                        <li>Email: {details.email}</li>
+                        <li>Mobile No: {details.mobileNo}</li>
+                    </ul>
+                </Col>
+            </Row>
+            <Row className="p-4 m-4">
+                <Col>
+                    <ResetPassword />
+                </Col>
+            </Row>
+        </>
     )
 
 }
